@@ -31,7 +31,6 @@ builder.Services.AddScoped<CreateQuestionService>();
 builder.Services.AddScoped<CreateTestService>();
 builder.Services.AddSingleton<IEventPublisher, RabbitMqService>();
 builder.Services.Configure<RabbitMqSetings>(builder.Configuration.GetSection("RabbitMq"));
-builder.Services.AddAutoMapper(conf => { }, typeof(Program));
 builder.Services.AddMediatR(cnf=>cnf.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddScoped<GetQuestionService>();
 

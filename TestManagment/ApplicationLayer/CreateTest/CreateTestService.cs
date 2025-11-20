@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TestManagment.Domain.Entities;
 using TestManagment.Infrastructure.DataBase;
 using TestManagment.Shared.Dtos;
@@ -9,12 +8,10 @@ namespace TestManagment.Services.CreateTest
     public class CreateTestService
     {
         private TestDbContext dbContext { get; }
-        private readonly IMapper mapper;
 
-        public CreateTestService(TestDbContext _dbContext, IMapper _mapper)
+        public CreateTestService(TestDbContext _dbContext)
         {
             dbContext = _dbContext;
-            mapper = _mapper;
         }
 
         public async Task CreateTest(CreateTestDto createTestDto)
@@ -30,8 +27,7 @@ namespace TestManagment.Services.CreateTest
                 throw new ArgumentException($"Invalid question ids {string.Join(",",invalidIds)}");
             }
 
-            var test = mapper.Map<Test>(createTestDto);
-
+            var test = ObjectMapper.CreateTestRequestToTest(createTestDto);
             await dbContext.AddAsync(test);
             await dbContext.SaveChangesAsync();
         }

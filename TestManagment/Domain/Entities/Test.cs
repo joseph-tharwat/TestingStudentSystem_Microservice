@@ -8,12 +8,17 @@ namespace TestManagment.Domain.Entities
         public int Id { get; private set; }
         public TestTitle Title { get; set; }
         public TestPublicationStatus PublicationStatus { get; private set; }
-        public ICollection<TestQuestion> TestQuestions { get; set; }  
+        public ICollection<TestQuestion> TestQuestions { get; private set; } = [];
         public Collection<TestsScheduling> Schedulings { get; set; }
 
         public Test()
         {
-            PublicationStatus = new TestPublicationStatus();
+            this.PublicationStatus = new TestPublicationStatus();
+        }
+        public Test(TestTitle testTitle)
+        {
+            this.Title = testTitle;
+            this.PublicationStatus = new TestPublicationStatus();
         }
 
         public void AddQuestion(int questionId)

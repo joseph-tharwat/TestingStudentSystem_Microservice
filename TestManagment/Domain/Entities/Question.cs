@@ -13,5 +13,17 @@ namespace TestManagment.Domain.Entities
         public QuestionAnswer Answer {  get; private set; }
         public Collection<TestQuestion> TestQuestions { get; set; }
 
+        public Question()
+        {
+            
+        }
+        public Question(QuestionTxt questionTxt, QuestionChoise choise1, QuestionChoise choise2, QuestionChoise choise3, QuestionAnswer answer)
+        {
+            this.QuestionText = questionTxt;
+            this.Choise1 = choise1;
+            this.Choise2 = choise2;
+            this.Choise3 = choise3;
+            this.Answer = answer;
+        }
     }
 }
