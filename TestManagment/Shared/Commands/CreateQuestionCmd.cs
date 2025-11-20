@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
 
 namespace TestManagment.Shared.Dtos
 {
-    public class QuestionDto
+    public class CreateQuestionCmd:ICmd
     {
         [Required(AllowEmptyStrings =false, ErrorMessage ="Question text is required")]
         public string QuestionText { get; set; }

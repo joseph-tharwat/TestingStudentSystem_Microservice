@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using TestManagment.ApplicationLayer.GetQuestion;
-using TestManagment.Domain.Entities;
+using TestManagment.ApplicationLayer.Interfaces.QueryMediator;
 using TestManagment.PresentaionLayer;
-using TestManagment.Shared.Dtos;
+using TestManagment.Shared.Requests;
 
 namespace TestManagment.Controllers
 {
@@ -12,21 +10,21 @@ namespace TestManagment.Controllers
     [ApiController]
     public class GetQuestionController : ControllerBase
     {
-        private readonly GetQuestionService getQuestionService;
+        private readonly IRqtHandler<GetNextQuestionRequest, NextQuestion> handler;
         private readonly IHubContext<TestObservationHub> testObservationHub;
 
-        public GetQuestionController(GetQuestionService getQuestionService, IHubContext<TestObservationHub> testObservationHub)
+        public GetQuestionController(IRqtHandler<GetNextQuestionRequest, NextQuestion> handler, IHubContext<TestObservationHub> testObservationHub)
         {
-            this.getQuestionService = getQuestionService;
+            this.handler = handler;
             this.testObservationHub = testObservationHub;
         }
 
         [HttpGet("GetNextQuestion")]
-        public async Task<ActionResult<NextQuestion>> GetNextQuestion([FromQuery]StudentProgress studentProgress)
+        public async Task<ActionResult<NextQuestion>> GetNextQuestion([FromQuery]GetNextQuestionRequest studentProgress)
         {
             try
             {
-                var nextQuestion = await getQuestionService.GetNextQuestionAsync(studentProgress);
+                var nextQuestion = await handler.Handle(studentProgress);
                 await testObservationHub.Clients.All.SendAsync("StudentGotNextQuestion", Request.Headers["x-UserName"].ToString(), studentProgress);
                 return Ok(nextQuestion);
             }

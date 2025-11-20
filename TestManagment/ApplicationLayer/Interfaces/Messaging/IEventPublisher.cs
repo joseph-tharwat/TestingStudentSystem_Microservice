@@ -1,6 +1,6 @@
 ﻿using TestManagment.Domain.Events;
 
-namespace TestManagment.ApplicationLayer.CreateQuestion.Interfaces
+namespace TestManagment.ApplicationLayer.Interfaces.Messaging
 {
     public interface IEventPublisher
     {

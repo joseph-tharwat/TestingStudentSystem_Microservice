@@ -3,12 +3,13 @@ using TestManagment.Domain.Entities;
 using TestManagment.Domain.Events;
 using TestManagment.Domain.ValueObjects.Question;
 using TestManagment.Domain.ValueObjects.Test;
+using TestManagment.Shared.Requests;
 
 namespace TestManagment.Shared.Dtos
 {
     public static partial class ObjectMapper
     {
-        public static Expression<Func<QuestionDto, Question>> QuestionRequestToQuestion()
+        public static Expression<Func<CreateQuestionCmd, Question>> QuestionRequestToQuestion()
         {
             return request => new Question(
                     new QuestionTxt(request.QuestionText),
@@ -19,7 +20,7 @@ namespace TestManagment.Shared.Dtos
                     );
         }
 
-        public static Question QuestionRequestToQuestion(QuestionDto request)
+        public static Question QuestionRequestToQuestion(CreateQuestionCmd request)
         {
             return new Question(
                     new QuestionTxt(request.QuestionText),
@@ -29,7 +30,7 @@ namespace TestManagment.Shared.Dtos
                     new QuestionAnswer(request.Answer)
                     );
         }
-        public static List<Question> QuestionRequestListToQuestionList(List<QuestionDto> requests)
+        public static List<Question> QuestionRequestListToQuestionList(List<CreateQuestionCmd> requests)
         {
             List<Question> questions = new List<Question>();
             foreach(var request in requests)
@@ -66,7 +67,7 @@ namespace TestManagment.Shared.Dtos
 
     public static partial class ObjectMapper
     {
-        public static Test CreateTestRequestToTest(CreateTestDto request)
+        public static Test CreateTestRequestToTest(CreateTestCmd request)
         {
             var test = new Test(new TestTitle(request.TestTitle));
             foreach (var id in request.questionsIds)

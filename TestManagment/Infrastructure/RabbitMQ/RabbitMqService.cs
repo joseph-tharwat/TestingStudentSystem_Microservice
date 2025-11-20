@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Connections;
 using TestManagment.Domain.Events;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using TestManagment.ApplicationLayer.CreateQuestion.Interfaces;
+using TestManagment.ApplicationLayer.Interfaces.Messaging;
 
 namespace TestManagment.Infrastructure.RabbitMQ
 {

@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Serilog;
-using System.Threading.Tasks;
-using TestManagment.Domain.Entities;
-using TestManagment.Services.CreateTest;
+﻿using Microsoft.AspNetCore.Mvc;
+using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
 using TestManagment.Shared.Dtos;
 
 namespace TestManagment.Controllers
@@ -12,15 +8,21 @@ namespace TestManagment.Controllers
     [ApiController]
     public class CreateTestController : ControllerBase
     {
-        private CreateTestService CreateTestService { get; }
+        private readonly ICmdHandler<CreateTestCmd> createTestHandler;
+        private readonly ICmdHandler<AddQuestionToTestCmd> addQuestionToTestHandler;
+        private readonly ICmdHandler<RemoveQuestionFromTestCmd> removeQuestionFromTestHandler;
 
-        public CreateTestController(CreateTestService createTestService)
+        public CreateTestController(ICmdHandler<CreateTestCmd> createTestHandler,
+            ICmdHandler<AddQuestionToTestCmd> addQuestionToTestHandler,
+            ICmdHandler<RemoveQuestionFromTestCmd> removeQuestionFromTestHandler)
         {
-            CreateTestService = createTestService;
+            this.createTestHandler = createTestHandler;
+            this.addQuestionToTestHandler = addQuestionToTestHandler;
+            this.removeQuestionFromTestHandler = removeQuestionFromTestHandler;
         }
 
         [HttpPost("CreateTest")]
-        public async Task<IActionResult> CreateTest(CreateTestDto createTestDto)
+        public async Task<IActionResult> CreateTest(CreateTestCmd createTestDto)
         {
             if (createTestDto == null)
             {
@@ -33,7 +35,7 @@ namespace TestManagment.Controllers
 
             try
             {
-                await CreateTestService.CreateTest(createTestDto);
+                await createTestHandler.Handle(createTestDto);
                 return Created();
             }
             catch (Exception ex)
@@ -43,11 +45,11 @@ namespace TestManagment.Controllers
         }
 
         [HttpPost("AddQuestionToTest")]
-        public async Task<IActionResult> AddQuestionToTest(ModifyTestRequest modifyTestRequest)
+        public async Task<IActionResult> AddQuestionToTest(AddQuestionToTestCmd modifyTestRequest)
         {
             try
             {
-                await CreateTestService.AddQuestionToTest(modifyTestRequest);
+                await addQuestionToTestHandler.Handle(modifyTestRequest);
             }
             catch(Exception e)
             {
@@ -57,11 +59,11 @@ namespace TestManagment.Controllers
         }
 
         [HttpPost("RemoveQuestionToTest")]
-        public async Task<IActionResult> RemoveQuestionToTest(ModifyTestRequest modifyTestRequest)
+        public async Task<IActionResult> RemoveQuestionToTest(RemoveQuestionFromTestCmd modifyTestRequest)
         {
             try
             {
-                await CreateTestService.RemoveQuestionToTest(modifyTestRequest);
+                await removeQuestionFromTestHandler.Handle(modifyTestRequest);
             }
             catch (Exception e)
             {

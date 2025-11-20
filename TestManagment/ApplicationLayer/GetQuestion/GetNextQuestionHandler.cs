@@ -1,43 +1,42 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
+using TestManagment.ApplicationLayer.Interfaces.QueryMediator;
 using TestManagment.Infrastructure.DataBase;
 using TestManagment.Shared.Dtos;
+using TestManagment.Shared.Requests;
 
 namespace TestManagment.ApplicationLayer.GetQuestion
 {
-    public class GetQuestionService
+    public class GetNextQuestionHandler : IRqtHandler<GetNextQuestionRequest, NextQuestion>
     {
         private readonly TestDbContext dbContext;
 
-        public GetQuestionService(TestDbContext dbContext)
+        public GetNextQuestionHandler(TestDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
-
-        public async Task<NextQuestion> GetNextQuestionAsync(StudentProgress studentProgress)
+        public async Task<NextQuestion> Handle(GetNextQuestionRequest request)
         {
-            if(studentProgress.QuestionIndex < 1)
+            if (request.QuestionIndex < 1)
             {
                 throw new Exception("Question index should be greater than 0");
             }
-            
+
             var nextQuestionId = await dbContext.TestsQuestions
-                .Where(t=>t.TestId == studentProgress.TestId)
-                .OrderBy(q=>q.QuestionId)
-                .Skip(studentProgress.QuestionIndex - 1)
+                .Where(t => t.TestId == request.TestId)
+                .OrderBy(q => q.QuestionId)
+                .Skip(request.QuestionIndex - 1)
                 .Take(1)
-                .Select(t=>t.QuestionId)
+                .Select(t => t.QuestionId)
                 .FirstOrDefaultAsync();
 
-            if(nextQuestionId == 0)
+            if (nextQuestionId == 0)
             {
                 throw new Exception("The Exam is end no more questions");
             }
 
             var NextQuestion = await dbContext.Questions
-                .Where(q=> q.Id == nextQuestionId)
-                .Select(ObjectMapper.QuestionToNextQuestion(studentProgress.QuestionIndex))
+                .Where(q => q.Id == nextQuestionId)
+                .Select(ObjectMapper.QuestionToNextQuestion(request.QuestionIndex))
                 .FirstOrDefaultAsync();
 
             if (NextQuestion == null)
@@ -46,7 +45,6 @@ namespace TestManagment.ApplicationLayer.GetQuestion
             }
 
             return NextQuestion;
-
         }
     }
 }

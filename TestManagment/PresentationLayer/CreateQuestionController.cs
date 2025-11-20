@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using TestManagment.Services.CreateTest;
+using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
 using TestManagment.Shared.Dtos;
 
 namespace TestManagment.Controllers
@@ -9,18 +9,23 @@ namespace TestManagment.Controllers
     [ApiController]
     public class CreateQuestionController : ControllerBase
     {
-        private CreateQuestionService CreateTestService { get; }
+        private readonly ICmdHandler<CreateQuestionCmd> createQuestionHandler;
+        private readonly ICmdHandler<CreateQuestionListCmd> createQuestionListHandler;
 
-        public CreateQuestionController(CreateQuestionService createTestService)
+
+        public CreateQuestionController(
+            ICmdHandler<CreateQuestionCmd> createQuestionHandler,
+            ICmdHandler<CreateQuestionListCmd> CreateQuestionListHandler)
         {
-            CreateTestService = createTestService;
+            this.createQuestionHandler = createQuestionHandler;
+            createQuestionListHandler = CreateQuestionListHandler;
         }
 
         [HttpPost("CreateQuestion")]
-        public async Task<IActionResult> CreateQuestion(QuestionDto question)
+        public async Task<IActionResult> CreateQuestion(CreateQuestionCmd cmd)
         {
             Log.Logger.Information("Create Question Endpoint");
-            if(question == null)
+            if(cmd == null)
             {
                 return BadRequest("question must be not null");
             }
@@ -31,7 +36,7 @@ namespace TestManagment.Controllers
 
             try
             {
-                await CreateTestService.CreateQuestion(question);
+                await createQuestionHandler.Handle(cmd);
                 return Created();
             }
             catch (Exception ex)
@@ -41,13 +46,13 @@ namespace TestManagment.Controllers
         }
 
         [HttpPost("CreateQuestions")]
-        public async Task<IActionResult> CreateQuestions(List<QuestionDto>  questions)
+        public async Task<IActionResult> CreateQuestions(CreateQuestionListCmd cmd)
         {
-            if (questions == null)
+            if (cmd == null)
             {
                 return BadRequest("question must be not null");
             }
-            if (questions.Count == 0)
+            if (cmd.List.Count == 0)
             {
                 return BadRequest("At least send one question.");
             }
@@ -57,7 +62,7 @@ namespace TestManagment.Controllers
             }
             try
             {
-                await CreateTestService.CreateQuestions(questions);
+                await createQuestionListHandler.Handle(cmd);
                 return Created();
             }
             catch (Exception ex)

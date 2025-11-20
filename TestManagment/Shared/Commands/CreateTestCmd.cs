@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
 
 namespace TestManagment.Shared.Dtos
 {
-    public class CreateTestDto
+    public class CreateTestCmd:ICmd
     {
         [Required(AllowEmptyStrings =false, ErrorMessage = "Test title can not be empty")]
         public string TestTitle { get; set; }
