@@ -24,7 +24,6 @@ namespace TestManagment.Controllers
         [HttpPost("CreateQuestion")]
         public async Task<IActionResult> CreateQuestion(CreateQuestionCmd cmd)
         {
-            Log.Logger.Information("Create Question Endpoint");
             if(cmd == null)
             {
                 return BadRequest("question must be not null");

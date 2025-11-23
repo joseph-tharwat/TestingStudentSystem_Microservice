@@ -9,12 +9,12 @@ namespace TestManagment.ApplicationLayer.CreateQuestion
     public class CreateQuestionListCmdHandler : ICmdHandler<CreateQuestionListCmd>
     {
         private TestDbContext dbContext { get; }
-        private readonly IDomainEventHandler<ManyQuestionsCreatedEvent> eventHandler;
+        private readonly IDomainEventDispatcher eventDispatcher;
 
-        public CreateQuestionListCmdHandler(TestDbContext _dbContext, IDomainEventHandler<ManyQuestionsCreatedEvent> eventHandler)
+        public CreateQuestionListCmdHandler(TestDbContext _dbContext, IDomainEventDispatcher eventDispatcher)
         {
             this.dbContext = _dbContext;
-            this.eventHandler = eventHandler;
+            this.eventDispatcher= eventDispatcher;
         }
         public async Task Handle(CreateQuestionListCmd cmd)
         {
@@ -23,7 +23,7 @@ namespace TestManagment.ApplicationLayer.CreateQuestion
             await dbContext.SaveChangesAsync();
 
             var questionsInfo = ObjectMapper.QuestionListToQuestionCreatedInfoList(questions);
-            await eventHandler.Publish(new ManyQuestionsCreatedEvent(questionsInfo));
+            await eventDispatcher.DispatchAsync(new ManyQuestionsCreatedEvent(questionsInfo));
         }
     }
 }

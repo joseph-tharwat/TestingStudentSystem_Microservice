@@ -1,14 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using SharedLogger;
-using TestManagment.ApplicationLayer.GetQuestion;
-using TestManagment.ApplicationLayer.Interfaces.EventMediator;
 using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
+using TestManagment.ApplicationLayer.Interfaces.EventMediator;
+using TestManagment.ApplicationLayer.Interfaces.Messaging;
+using TestManagment.ApplicationLayer.Interfaces.QueryMediator;
+using TestManagment.ApplicationLayer.Logging;
+using TestManagment.Domain.Events;
 using TestManagment.Infrastructure.DataBase;
+using TestManagment.Infrastructure.EventDispatcher;
 using TestManagment.Infrastructure.RabbitMQ;
 using TestManagment.PresentaionLayer;
-using TestManagment.ApplicationLayer.Interfaces.QueryMediator;
-using TestManagment.ApplicationLayer.Interfaces.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +45,11 @@ builder.Services.Scan(scan =>
     .AsImplementedInterfaces()
     .WithScopedLifetime()
 );
+
+builder.Services.Decorate(typeof(ICmdHandler<>), typeof(LoggingCmdHandlerDecorator<>));
+builder.Services.Decorate(typeof(IRqtHandler<,>), typeof(LoggingRqtHandlerDecorator<,>));
+
+builder.Services.AddScoped<IDomainEventDispatcher, EventDispatcher>();
 
 builder.Services.AddEndpointsApiExplorer();  
 builder.Services.AddSwaggerUI();
