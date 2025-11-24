@@ -4,8 +4,7 @@ namespace GradingManagment.Shared
 {
     public class StudentAnswer
     {
-        [Required]
-        public int StudentId { get; set; }
+        public string? StudentId { get; set; }
         [Required]
         public int TestId { get; set; }
         [Required]

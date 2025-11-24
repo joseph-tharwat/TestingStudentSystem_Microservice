@@ -3,6 +3,7 @@ using GradingManagment.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GradingManagment.Infrastructure.Migrations
 {
     [DbContext(typeof(GradingDbContext))]
-    partial class GradingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251124082617_changeStudentIdToString")]
+    partial class changeStudentIdToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +33,7 @@ namespace GradingManagment.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("QuestionId"), "EntityFrameworkHiLoSequence");
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("QuestionId"));
 
                     b.Property<string>("Answer")
                         .IsRequired()
@@ -38,7 +41,7 @@ namespace GradingManagment.Infrastructure.Migrations
 
                     b.HasKey("QuestionId");
 
-                    b.ToTable("QuestionInformations", (string)null);
+                    b.ToTable("QuestionInformations");
                 });
 
             modelBuilder.Entity("GradingManagment.Domain.Entities.StudentGrade", b =>
@@ -61,7 +64,7 @@ namespace GradingManagment.Infrastructure.Migrations
 
                     b.HasKey("QuestionId", "TestId", "StudentId");
 
-                    b.ToTable("StudentGrades", (string)null);
+                    b.ToTable("StudentGrades");
                 });
 #pragma warning restore 612, 618
         }

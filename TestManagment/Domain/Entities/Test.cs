@@ -9,7 +9,7 @@ namespace TestManagment.Domain.Entities
         public TestTitle Title { get; set; }
         public TestPublicationStatus PublicationStatus { get; private set; }
         public ICollection<TestQuestion> TestQuestions { get; private set; } = [];
-        public Collection<TestsScheduling> Schedulings { get; set; }
+        public TestsScheduling Schedulings { get; private set; } 
 
         public Test()
         {
@@ -50,12 +50,13 @@ namespace TestManagment.Domain.Entities
             TestQuestions.Remove(testQuestion);
         }
 
-        public void Publish()
+        public void Publish(DateTime testTime)
         {
             if (PublicationStatus)
             {
                 throw new InvalidOperationException("This test has been published before");
             }
+            Schedulings = new TestsScheduling(Id, testTime);
             PublicationStatus = PublicationStatus.Publish();
         }
 
@@ -65,8 +66,8 @@ namespace TestManagment.Domain.Entities
             {
                 throw new InvalidOperationException("This test has not published before");
             }
-            PublicationStatus.unPublish();
+            Schedulings = null; 
+            PublicationStatus = PublicationStatus.UnPublish();
         }
-
     }
 }

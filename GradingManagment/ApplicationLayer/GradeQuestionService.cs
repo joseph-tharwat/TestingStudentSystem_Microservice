@@ -10,15 +10,20 @@ namespace GradingManagment.ApplicationLayer
     {
         private readonly GradingDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public GradeQuestionService(GradingDbContext dbContext, IMapper mapper)
+        public GradeQuestionService(GradingDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task GradeStudentAnswerAsync(StudentAnswer studentAnswer)
         {
+            string studentId = httpContextAccessor.HttpContext.Request.Headers["X-studentId"];
+            studentAnswer.StudentId = studentId;
+
             var studnetGrade = mapper.Map<StudentGrade>(studentAnswer);
 
             var existedAnswer = await dbContext.StudentGrades

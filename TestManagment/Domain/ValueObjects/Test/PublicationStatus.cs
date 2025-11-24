@@ -16,7 +16,7 @@
         {
             return new TestPublicationStatus(true);
         }
-        public TestPublicationStatus unPublish()
+        public TestPublicationStatus UnPublish()
         {
             return new TestPublicationStatus(false);
         }

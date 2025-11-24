@@ -21,6 +21,7 @@ builder.Services.Configure<RabbitMqSetings>(builder.Configuration.GetSection("Ra
 builder.Services.AddAutoMapper(conf => { }, typeof(Program));
 builder.Services.AddHostedService<GetTestInfoWorker>();
 builder.Services.AddScoped<GradeQuestionService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

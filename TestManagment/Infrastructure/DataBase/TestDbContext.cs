@@ -80,9 +80,9 @@ namespace TestManagment.Infrastructure.DataBase
                 .HasForeignKey(tq=>tq.QuestionId);
 
             modelBuilder.Entity<Test>()
-                .HasMany(t => t.Schedulings)
+                .HasOne(t => t.Schedulings)
                 .WithOne(s => s.test)
-                .HasForeignKey(s => s.TestId);
+                .HasForeignKey<TestsScheduling>(ts => ts.TestId);
 
             modelBuilder.UseHiLo();
 
