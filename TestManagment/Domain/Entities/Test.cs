@@ -8,6 +8,7 @@ namespace TestManagment.Domain.Entities
         public int Id { get; private set; }
         public TestTitle Title { get; set; }
         public TestPublicationStatus PublicationStatus { get; private set; }
+        public bool IsNotified { get; private set; }
         public ICollection<TestQuestion> TestQuestions { get; private set; } = [];
         public TestsScheduling Schedulings { get; private set; } 
 
@@ -68,6 +69,16 @@ namespace TestManagment.Domain.Entities
             }
             Schedulings = null; 
             PublicationStatus = PublicationStatus.UnPublish();
+        }
+    
+        public void Notify()
+        {
+            if(IsNotified)
+            {
+                throw new InvalidOperationException("Can not notify as it is already notified before");
+            }
+
+            IsNotified = true;
         }
     }
 }

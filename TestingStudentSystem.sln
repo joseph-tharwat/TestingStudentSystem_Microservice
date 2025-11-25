@@ -13,6 +13,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLogger", "SharedLogger\SharedLogger.csproj", "{0992DC86-8B1D-2A8E-79A2-907941BD778E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunicationContract", "CommunicationContract\CommunicationContract.csproj", "{07A26865-73B9-7325-8332-C3323FC0C4F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0992DC86-8B1D-2A8E-79A2-907941BD778E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0992DC86-8B1D-2A8E-79A2-907941BD778E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0992DC86-8B1D-2A8E-79A2-907941BD778E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07A26865-73B9-7325-8332-C3323FC0C4F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07A26865-73B9-7325-8332-C3323FC0C4F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07A26865-73B9-7325-8332-C3323FC0C4F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07A26865-73B9-7325-8332-C3323FC0C4F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

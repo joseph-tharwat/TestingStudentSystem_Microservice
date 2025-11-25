@@ -5,11 +5,13 @@ using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
 using TestManagment.ApplicationLayer.Interfaces.EventMediator;
 using TestManagment.ApplicationLayer.Interfaces.Messaging;
 using TestManagment.ApplicationLayer.Interfaces.QueryMediator;
+using TestManagment.ApplicationLayer.Interfaces.TestReminder;
 using TestManagment.ApplicationLayer.Logging;
-using TestManagment.Domain.Events;
+using TestManagment.ApplicationLayer.TeastReminder;
 using TestManagment.Infrastructure.DataBase;
 using TestManagment.Infrastructure.EventDispatcher;
 using TestManagment.Infrastructure.RabbitMQ;
+using TestManagment.Infrastructure.TestReminder;
 using TestManagment.PresentaionLayer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +52,15 @@ builder.Services.Decorate(typeof(ICmdHandler<>), typeof(LoggingCmdHandlerDecorat
 builder.Services.Decorate(typeof(IRqtHandler<,>), typeof(LoggingRqtHandlerDecorator<,>));
 
 builder.Services.AddScoped<IDomainEventDispatcher, EventDispatcher>();
+
+builder.Services.AddScoped<IGetAllStudentsService, GetAllstudentsGrpc>();
+builder.Services.AddScoped<ITestReminderService, TestReminderByEmail>();
+builder.Services.AddScoped<INotifyService, EmailNotifer>();
+builder.Services.AddHostedService<TestNotificationWorker>();
+builder.Services.AddGrpcClient<GetAllUsersInfo.GetAllUsersInfo.GetAllUsersInfoClient>(option => {
+    option.Address = new Uri("http://localhost:5169");
+}
+);
 
 builder.Services.AddEndpointsApiExplorer();  
 builder.Services.AddSwaggerUI();

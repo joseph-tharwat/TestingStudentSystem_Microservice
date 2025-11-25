@@ -1,0 +1,16 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GetAllUsersInfo";
+
+service GetAllUsersInfo {
+	rpc GetAllUsersEmails(GetAllUsersEmailsRequest) returns (GetAllUsersEmailsResponse);
+}
+
+message GetAllUsersEmailsRequest{
+
+}
+
+message GetAllUsersEmailsResponse{
+	repeated string emails = 1;
+} 
+ 

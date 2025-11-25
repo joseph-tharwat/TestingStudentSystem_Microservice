@@ -62,6 +62,10 @@ namespace TestManagment.Infrastructure.DataBase
                 .HasConversion(status => status.IsPublished, isPublished => new TestPublicationStatus(isPublished))
                 .HasColumnName("IsPublished");
 
+            modelBuilder.Entity<Test>()
+                .Property(t => t.IsNotified)
+                .HasColumnName("IsNotified")
+                .HasDefaultValue(false);
 
             modelBuilder.Entity<TestsScheduling>()
                 .HasKey(t => new {t.TestId, t.DateTime});

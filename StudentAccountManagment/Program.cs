@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using SharedLogger;
 using StudentAccountManagment.ApplicationLayer;
+using StudentAccountManagment.Controllers;
 using StudentAccountManagment.Infrastructure;
 using StudentAccountManagment.Infrastructure.Jwt;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,6 +27,9 @@ builder.Services.AddDbContext<AuthDbContext>(opt => opt.UseSqlServer(builder.Con
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<GetAllUsersEmailsHandler>();
+builder.Services.AddGrpc();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<JwtService>();
@@ -92,9 +97,18 @@ builder.Services.AddCors(options =>
     });
 });
 
+// HTTP/2 required for gRPC
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenLocalhost(5169, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http2; 
+    });
+});
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -115,6 +129,8 @@ app.UseAuthorization();
 
 app.MapReverseProxy();
 app.UseCors("AllowAll");
+
+app.MapGrpcService<GetAllUserInfoEndPoints>();
 
 app.MapControllers();
 
