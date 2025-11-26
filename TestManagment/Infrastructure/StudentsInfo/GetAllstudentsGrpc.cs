@@ -1,7 +1,7 @@
 ﻿using GetAllUsersInfo;
 using TestManagment.ApplicationLayer.Interfaces.TestReminder;
 
-namespace TestManagment.ApplicationLayer.TeastReminder
+namespace TestManagment.Infrastructure.StudentsInfo
 {
     public class GetAllstudentsGrpc:  IGetAllStudentsService
     {

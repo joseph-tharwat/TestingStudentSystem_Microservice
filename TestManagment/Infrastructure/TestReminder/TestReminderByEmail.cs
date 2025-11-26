@@ -3,7 +3,7 @@ using TestManagment.ApplicationLayer.Interfaces.TestReminder;
 using TestManagment.Domain.Entities;
 using TestManagment.Infrastructure.DataBase;
 
-namespace TestManagment.ApplicationLayer.TeastReminder
+namespace TestManagment.Infrastructure.TestReminder
 {
     public class TestReminderByEmail : ITestReminderService
     {
@@ -22,15 +22,22 @@ namespace TestManagment.ApplicationLayer.TeastReminder
             List<Test> testsToNotify = await dbContext.Tests
                 .Include(t=>t.Schedulings)
                 .Where(t=> t.IsNotified == false &&
-                           t.Schedulings.DateTime.AddMinutes(1) < DateTime.UtcNow && //1 minutes for testing, it should be every 1 hour
-                           t.Schedulings.DateTime.AddMinutes(2) > DateTime.UtcNow 
-                            || true==true) // true for testing to neglict the time during the testing
+                           t.Schedulings.DateTime.AddHours(1) <= DateTime.UtcNow && 
+                           t.Schedulings.DateTime.AddHours(2) > DateTime.UtcNow)
                 .ToListAsync();
+            if (testsToNotify.Count == 0)
+            {
+                return;
+            }
 
+            List<string> studentEmails = await getAllStudentsService.GetAllEmails();
+            if (studentEmails.Count == 0) 
+            {
+                return;
+            }
             foreach (var test in testsToNotify)
             {
                 test.Notify();
-                List<string> studentEmails = await getAllStudentsService.GetAllEmails();
                 await notifyService.Notify(studentEmails);
             }
 

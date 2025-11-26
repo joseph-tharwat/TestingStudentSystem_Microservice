@@ -14,13 +14,14 @@ The system is composed of the following services:
 
 - **RabbitMq** — used for communication between the test service and grade service.
 - **Serilog and seq** — used to log the messegeses and see it in UI.
-- **Yarp** — used as a ApiGetWay, it is installed in **StudentAccountManagement** service
+- **Yarp** — used as a ApiGetWay, it is installed in **StudentAccountManagement** service.
 - **SignalR** — Used so the teacher can observe the student answering the test in real time during the test.
 - **Manual Mediator** — Use manual mediator insted of MediatR as now MediatR package is not free.
 - **Manual Mapping** — Use manual mapping insted of AutoMapper to gain flexibility.
-- **gRPC** — use gRPC to get the students emails from Auth service to TestManagment service
+- **gRPC** — use gRPC to get the students emails from Auth service to TestManagment service.
+- **MailKit** — use MailKit package to use gmail service to notify the students with upcomming tests.
 
-- **DDD** — I tried to use Domain Driven Design to create Entities, Value Objects, events... 
+- **DDD** — I tried to use Domain Driven Design tactical part to create Entities, Value Objects, events... 
 - **Archeticture** — All services are implemented using Onion Archeticture [Domain Layer, Application Layer, Presentation Layer, Infrastracture Layer] 
 
 # How to run 

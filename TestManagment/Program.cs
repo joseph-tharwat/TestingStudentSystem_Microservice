@@ -7,10 +7,12 @@ using TestManagment.ApplicationLayer.Interfaces.Messaging;
 using TestManagment.ApplicationLayer.Interfaces.QueryMediator;
 using TestManagment.ApplicationLayer.Interfaces.TestReminder;
 using TestManagment.ApplicationLayer.Logging;
-using TestManagment.ApplicationLayer.TeastReminder;
+using TestManagment.ApplicationLayer.TestNotifier;
 using TestManagment.Infrastructure.DataBase;
 using TestManagment.Infrastructure.EventDispatcher;
+using TestManagment.Infrastructure.Notifications;
 using TestManagment.Infrastructure.RabbitMQ;
+using TestManagment.Infrastructure.StudentsInfo;
 using TestManagment.Infrastructure.TestReminder;
 using TestManagment.PresentaionLayer;
 
@@ -55,12 +57,12 @@ builder.Services.AddScoped<IDomainEventDispatcher, EventDispatcher>();
 
 builder.Services.AddScoped<IGetAllStudentsService, GetAllstudentsGrpc>();
 builder.Services.AddScoped<ITestReminderService, TestReminderByEmail>();
-builder.Services.AddScoped<INotifyService, EmailNotifer>();
+builder.Services.AddScoped<INotifyService, GmailNotifer>();
 builder.Services.AddHostedService<TestNotificationWorker>();
 builder.Services.AddGrpcClient<GetAllUsersInfo.GetAllUsersInfo.GetAllUsersInfoClient>(option => {
     option.Address = new Uri("http://localhost:5169");
-}
-);
+});
+builder.Services.Configure<GmailSettings>(builder.Configuration.GetSection("Gmail"));
 
 builder.Services.AddEndpointsApiExplorer();  
 builder.Services.AddSwaggerUI();

@@ -1,7 +1,8 @@
 ﻿
+using Serilog;
 using TestManagment.ApplicationLayer.Interfaces.TestReminder;
 
-namespace TestManagment.Infrastructure.TestReminder
+namespace TestManagment.ApplicationLayer.TestNotifier
 {
     public class TestNotificationWorker : BackgroundService
     {
@@ -16,9 +17,16 @@ namespace TestManagment.Infrastructure.TestReminder
         {
             while(!stoppingToken.IsCancellationRequested)
             {
-                using var scope = serviceScopeFactory.CreateScope();
-                ITestReminderService? reminder = scope.ServiceProvider.GetService<ITestReminderService>();
-                await reminder.SendUpcommingTestsNotificationsAsync();
+                try
+                {
+                    using var scope = serviceScopeFactory.CreateScope();
+                    ITestReminderService? reminder = scope.ServiceProvider.GetService<ITestReminderService>();
+                    await reminder.SendUpcommingTestsNotificationsAsync();
+                }
+                catch (Exception ex)
+                { 
+                    Log.Logger.Error(ex.Message);
+                }
 
                 await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
