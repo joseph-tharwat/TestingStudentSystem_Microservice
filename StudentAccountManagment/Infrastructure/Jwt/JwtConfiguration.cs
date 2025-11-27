@@ -37,5 +37,14 @@ namespace StudentAccountManagment.Infrastructure.Jwt
             );
             return services;
         }
+    
+        public static IServiceCollection InjectJwt(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
+            services.AddScoped<JwtService>();
+            return services;
+        }
+    
+    
     }
 }

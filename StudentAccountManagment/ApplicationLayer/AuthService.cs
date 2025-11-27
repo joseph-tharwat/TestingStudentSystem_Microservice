@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using StudentAccountManagment.Infrastructure;
+using StudentAccountManagment.Infrastructure.Database;
 using StudentAccountManagment.Infrastructure.Jwt;
 using StudentAccountManagment.Shared;
 

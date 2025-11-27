@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerUI();
 
@@ -17,9 +17,13 @@ SerilogSeqConfiguration.SerilogSeqConfigur("Grading", builder.Configuration);
 builder.Host.UseSerilog();
 
 builder.Services.AddDbContext<GradingDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("local")));
+
 builder.Services.Configure<RabbitMqSetings>(builder.Configuration.GetSection("RabbitMq"));
+
 builder.Services.AddAutoMapper(conf => { }, typeof(Program));
+
 builder.Services.AddHostedService<GetTestInfoWorker>();
+
 builder.Services.AddScoped<GradeQuestionService>();
 builder.Services.AddHttpContextAccessor();
 
@@ -32,7 +36,6 @@ using (var scope = app.Services.CreateScope())
     
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

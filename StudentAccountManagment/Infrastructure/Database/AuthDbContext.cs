@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace StudentAccountManagment.Infrastructure
+namespace StudentAccountManagment.Infrastructure.Database
 {
     public class AuthDbContext : IdentityDbContext<ApplicationUser>
     {

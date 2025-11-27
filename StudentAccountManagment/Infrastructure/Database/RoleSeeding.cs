@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace StudentAccountManagment.Infrastructure
+namespace StudentAccountManagment.Infrastructure.Database
 {
     public static class RoleSeeding
     {

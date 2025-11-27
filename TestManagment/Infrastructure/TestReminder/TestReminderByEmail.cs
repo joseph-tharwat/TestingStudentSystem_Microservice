@@ -23,7 +23,7 @@ namespace TestManagment.Infrastructure.TestReminder
                 .Include(t=>t.Schedulings)
                 .Where(t=> t.IsNotified == false &&
                            t.Schedulings.DateTime.AddHours(1) <= DateTime.UtcNow && 
-                           t.Schedulings.DateTime.AddHours(2) > DateTime.UtcNow)
+                           t.Schedulings.DateTime.AddHours(2) > DateTime.UtcNow || true==true)
                 .ToListAsync();
             if (testsToNotify.Count == 0)
             {
