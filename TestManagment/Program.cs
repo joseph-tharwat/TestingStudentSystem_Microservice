@@ -2,9 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using SharedLogger;
 using TestManagment.ApplicationLayer.Extension;
+using TestManagment.ApplicationLayer.Interfaces.Caching;
 using TestManagment.ApplicationLayer.Interfaces.EventMediator;
+using TestManagment.ApplicationLayer.Interfaces.QueryMediator;
 using TestManagment.ApplicationLayer.Interfaces.TestReminder;
+using TestManagment.ApplicationLayer.Logging;
 using TestManagment.ApplicationLayer.TestNotifier;
+using TestManagment.Infrastructure.Cache;
 using TestManagment.Infrastructure.DataBase;
 using TestManagment.Infrastructure.EventDispatcher;
 using TestManagment.Infrastructure.Extension;
@@ -33,6 +37,9 @@ builder.Services.AddSignalR();
 
 builder.Services.InjectHandlers();
 builder.Services.DecorateHandlersWithLogging();
+
+builder.Services.DecorateHandlersWithCaching();
+builder.Services.InjectInMemoryCache();
 
 builder.Services.AddScoped<IDomainEventDispatcher, EventDispatcher>();
 

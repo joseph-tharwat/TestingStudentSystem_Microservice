@@ -2,6 +2,7 @@
 using TestManagment.ApplicationLayer.Interfaces.EventMediator;
 using TestManagment.ApplicationLayer.Interfaces.QueryMediator;
 using TestManagment.ApplicationLayer.Logging;
+using TestManagment.Infrastructure.Cache;
 
 namespace TestManagment.ApplicationLayer.Extension
 {
@@ -35,7 +36,12 @@ namespace TestManagment.ApplicationLayer.Extension
             services.Decorate(typeof(IRqtHandler<,>), typeof(LoggingRqtHandlerDecorator<,>));
             return services;
         }
+        public static IServiceCollection DecorateHandlersWithCaching(this IServiceCollection services)
+        {
+            services.Decorate(typeof(IRqtHandler<,>), typeof(CacheDecorateor<,>));
+            services.Decorate(typeof(IRqtHandler<,>), typeof(LoggingCache<,>));
 
-
+            return services;
+        }
     }
 }
