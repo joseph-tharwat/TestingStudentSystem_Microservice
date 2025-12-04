@@ -3,6 +3,7 @@ using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
 using TestManagment.Domain.Events;
 using TestManagment.Infrastructure.DataBase;
 using TestManagment.Shared.Dtos;
+using TestManagment.Shared.Result;
 
 namespace TestManagment.ApplicationLayer.CreateQuestion
 {
@@ -16,7 +17,7 @@ namespace TestManagment.ApplicationLayer.CreateQuestion
             this.dbContext = _dbContext;
             this.eventDispatcher = eventDispatcher;
         }
-        public async Task Handle(CreateQuestionCmd request)
+        public async Task<Result> Handle(CreateQuestionCmd request)
         {
             var question = ObjectMapper.QuestionRequestToQuestion(request);
             await dbContext.AddAsync(question);
@@ -24,6 +25,7 @@ namespace TestManagment.ApplicationLayer.CreateQuestion
 
             var questionInfo = ObjectMapper.QuestionToQuestionCreatedInfo(question);
             await eventDispatcher.DispatchAsync(new OneQuestionCreatedEvent(questionInfo));
+            return null;
         }
     }
 }

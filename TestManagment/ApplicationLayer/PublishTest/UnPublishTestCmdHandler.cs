@@ -2,6 +2,7 @@
 using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
 using TestManagment.Domain.Entities;
 using TestManagment.Infrastructure.DataBase;
+using TestManagment.Shared.Result;
 
 namespace TestManagment.ApplicationLayer.PublishTest
 {
@@ -14,7 +15,7 @@ namespace TestManagment.ApplicationLayer.PublishTest
             dbContext = _dbContext;
         }
 
-        public async Task Handle(UnPublishTestCmd cmd)
+        public async Task<Result> Handle(UnPublishTestCmd cmd)
         {
             Test test = await dbContext.Tests.Where(t => t.Id == cmd.TestId).Include(t=>t.Schedulings).FirstOrDefaultAsync();
             if (test == null)
@@ -23,6 +24,7 @@ namespace TestManagment.ApplicationLayer.PublishTest
             }
             test.UnPublish();
             await dbContext.SaveChangesAsync();
+            return null;
         }
     }
 }

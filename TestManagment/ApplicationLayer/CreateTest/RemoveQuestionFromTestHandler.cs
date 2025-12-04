@@ -2,6 +2,7 @@
 using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
 using TestManagment.Infrastructure.DataBase;
 using TestManagment.Shared.Dtos;
+using TestManagment.Shared.Result;
 
 namespace TestManagment.ApplicationLayer.CreateTest
 {
@@ -13,7 +14,7 @@ namespace TestManagment.ApplicationLayer.CreateTest
         {
             dbContext = _dbContext;
         }
-        public async Task Handle(RemoveQuestionFromTestCmd cmd)
+        public async Task<Result> Handle(RemoveQuestionFromTestCmd cmd)
         {
             if (cmd.testId == 0)
             {
@@ -32,6 +33,7 @@ namespace TestManagment.ApplicationLayer.CreateTest
 
             test.RemoveQuestion(cmd.questionId);
             await dbContext.SaveChangesAsync();
+            return null;
         }
     }
 }

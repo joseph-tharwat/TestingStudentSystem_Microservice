@@ -4,6 +4,7 @@ using TestManagment.Domain.Events;
 using TestManagment.Domain.ValueObjects.Question;
 using TestManagment.Domain.ValueObjects.Test;
 using TestManagment.Shared.Requests;
+using TestManagment.Shared.Result;
 
 namespace TestManagment.Shared.Dtos
 {
@@ -67,14 +68,20 @@ namespace TestManagment.Shared.Dtos
 
     public static partial class ObjectMapper
     {
-        public static Test CreateTestRequestToTest(CreateTestCmd request)
+        public static Result<Test> CreateTestRequestToTest(CreateTestCmd request)
         {
-            var test = new Test(new TestTitle(request.TestTitle));
+            Result<TestTitle> titleResult = TestTitle.Create(request.TestTitle);
+            if(titleResult.IsFailure)
+            {
+                return Result<Test>.Failure(titleResult.Error);
+            }
+
+            var test = new Test(titleResult.Data);
             foreach (var id in request.questionsIds)
             {
                 test.AddQuestion(id);
             }
-            return test;
+            return Result<Test>.Success(test,null);
         }
     }
 

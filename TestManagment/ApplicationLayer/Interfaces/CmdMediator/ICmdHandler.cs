@@ -1,8 +1,10 @@
-﻿namespace TestManagment.ApplicationLayer.Interfaces.CmdMediator
+﻿using TestManagment.Shared.Result;
+
+namespace TestManagment.ApplicationLayer.Interfaces.CmdMediator
 {
     public interface ICmdHandler<TCmd> 
         where TCmd : ICmd
     {
-        public Task Handle(TCmd cmd);
+        public Task<Result> Handle(TCmd cmd);
     }
 }

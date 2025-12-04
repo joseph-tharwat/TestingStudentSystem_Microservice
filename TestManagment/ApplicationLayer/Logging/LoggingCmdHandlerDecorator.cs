@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
+using TestManagment.Shared.Result;
 
 namespace TestManagment.ApplicationLayer.Logging
 {
@@ -12,17 +13,19 @@ namespace TestManagment.ApplicationLayer.Logging
         {
             this.cmdHandler = innerHandler;
         }
-        public async Task Handle(TCmd cmd)
+        public async Task<Result> Handle(TCmd cmd)
         {
             Log.Logger.Information("Start handling the cmd " + typeof(TCmd).Name); 
             try
             {
-                await cmdHandler.Handle(cmd);
+                return await cmdHandler.Handle(cmd);
+               
             }
             catch (Exception ex)
             {
                 Log.Logger.Error("Error while handling " + typeof(TCmd).Name + ": " + ex.Message);
             }
+            return null;
         }
     }
 }

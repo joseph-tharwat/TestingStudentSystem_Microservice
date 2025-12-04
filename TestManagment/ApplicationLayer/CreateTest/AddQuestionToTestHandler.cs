@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TestManagment.ApplicationLayer.ErrorsNotes;
 using TestManagment.ApplicationLayer.Interfaces.CmdMediator;
+using TestManagment.Domain.DomainErrors;
 using TestManagment.Infrastructure.DataBase;
 using TestManagment.Shared.Dtos;
+using TestManagment.Shared.Result;
 
 namespace TestManagment.ApplicationLayer.CreateTest
 {
@@ -13,25 +16,33 @@ namespace TestManagment.ApplicationLayer.CreateTest
         {
             dbContext = _dbContext;
         }
-        public async Task Handle(AddQuestionToTestCmd cmd)
+        public async Task<Result> Handle(AddQuestionToTestCmd cmd)
         {
             if (cmd.testId == 0)
             {
-                throw new ArgumentException("Invalid test id");
+                return Result.Failure(TestErrors.NullTestId);
             }
             if (cmd.questionId == 0)
             {
-                throw new ArgumentException("Invalid question id");
+                return Result.Failure(TestErrors.NullQuestionId);
             }
 
             var test = await dbContext.Tests.Where(t => t.Id == cmd.testId).Include(t => t.TestQuestions).FirstOrDefaultAsync();
             if (test == null)
             {
-                throw new ArgumentException("This test is not created");
+                return Result.Failure(TestErrors.InvalidTestId);
             }
 
-            test.AddQuestion(cmd.questionId);
-            await dbContext.SaveChangesAsync();
+            Result result = test.AddQuestion(cmd.questionId);
+            try
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure(DatabaseErrors.FailedDuringSaveChanges);
+            }
+            return result;
         }
     }
 }

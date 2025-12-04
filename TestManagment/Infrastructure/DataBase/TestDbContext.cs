@@ -54,7 +54,7 @@ namespace TestManagment.Infrastructure.DataBase
 
             modelBuilder.Entity<Test>()
                 .Property(t => t.Title)
-                .HasConversion(title => title.Value, v => new TestTitle(v))
+                .HasConversion(title => title.Value, v => TestTitle.GetObject(v))
                 .HasColumnName("Title");
 
             modelBuilder.Entity<Test>()

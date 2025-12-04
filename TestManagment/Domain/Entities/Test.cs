@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using TestManagment.Domain.DomainErrors;
+using TestManagment.Domain.SuccessNotes;
 using TestManagment.Domain.ValueObjects.Test;
+using TestManagment.Shared.Result;
 
 namespace TestManagment.Domain.Entities
 {
@@ -22,18 +24,21 @@ namespace TestManagment.Domain.Entities
             this.PublicationStatus = new TestPublicationStatus();
         }
 
-        public void AddQuestion(int questionId)
+        public Result AddQuestion(int questionId)
         {
             if(PublicationStatus)
             {
-                throw new InvalidOperationException("The test has been published, You can not add any questions now.");
+                return Result.Failure(TestErrors.AlreadyPublishedCantAddQuestion);
             }
 
             if(TestQuestions.Any(q=>q.QuestionId == questionId))
             {
-                throw new InvalidOperationException("The question is already added before");
+                return Result.Failure(TestErrors.QuestionAddedBefore);
             }
+
             TestQuestions.Add(new TestQuestion(Id, questionId));
+
+            return Result.Success(QuestionNotes.QuestionAddedSuccessfully);
         }
 
         public void RemoveQuestion(int questionId)

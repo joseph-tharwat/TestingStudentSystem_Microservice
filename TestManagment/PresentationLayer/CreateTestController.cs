@@ -49,13 +49,13 @@ namespace TestManagment.Controllers
         {
             try
             {
-                await addQuestionToTestHandler.Handle(modifyTestRequest);
+                var result = await addQuestionToTestHandler.Handle(modifyTestRequest);
+                return StatusCode(result.StatusCode, result);
             }
             catch(Exception e)
             {
                 return BadRequest(e.Message);
             }
-            return Ok("Question was added successfully");
         }
 
         [HttpPost("RemoveQuestionToTest")]
